@@ -1,0 +1,492 @@
+{% extends 'base.html' %}
+
+{% block title %}졸업 사정 결과{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="font-size:4rem;">
+        <img src="/static/img/logo.png" alt="졸업 모자" class="graduation-cap">
+    </div>
+    <div class="big_title">졸업 사정 결과</div>
+</div>
+
+<div class="lcontainer">
+
+    <!-- 총 학점 -->
+    <div class="fcontainer">
+        <div class="resultbox container0">
+            <div class="name name0">
+                Total
+            </div>
+            <div class="box">
+                <div class="chart_box" id="chart0">
+                    <strong class="total_strong"></strong>
+                    <!-- 원 그래프 -->
+                    <script>
+                        //퍼센트화 함수
+                        function to_percent(my, standard) {
+                            a = (my / standard) * 100
+                            if (a > 100) {
+                                a = 100
+                            }
+                            return a;
+                        }
+                        
+                        $(document).ready(function () {
+                            // 학점 데이터 가져오기
+                            const totalGrade = parseInt($('#totalgrade').text(), 10);
+                            const myTotalGrade = parseInt($('#mytotalgrade').text(), 10);
+                    
+                            // 비율 계산
+                            const percentage = (myTotalGrade / totalGrade) * 100;
+                    
+                            // 원형 그래프 생성
+                            $('#chart0').circleProgress({
+                                value: percentage / 100,
+                                size: 200,              // 원 크기
+                                thickness: 15,          // 원 두께
+                                startAngle: 300,
+                                fill: {
+                                    gradient: ["#f5aeb0", "#b06163"] // 색상 그라데이션
+                                }
+                            }).on('circle-animation-progress', function (event, progress) {
+                                $(this).find('strong').html(Math.round(percentage) + '<i>%</i>');
+                            });
+                    
+                            // 졸업까지 필요한 학점 표시
+                            const remainingCredits = totalGrade - myTotalGrade;
+                            $('#cangraduate').text(`졸업까지 ${remainingCredits}학점이 필요합니다!`);
+                        });
+                    </script>
+                </div>
+                <div class="Sbox">
+                    <div class="gbox total_gbox">
+                        <span class="grade Grade">학번</span>
+                        <span class="t" id="studentnumber">{{ student_id }}</span>
+                    </div>
+                    <div class="gbox total_gbox">
+                        <span class="grade Grade">이름</span>
+                        <span class="t" id="name">{{ name }}</span>
+                    </div>
+                    <div class="gbox total_gbox">
+                        <span class="grade Grade">총 기준 학점
+                        </span>
+                        <span class="t" id="totalgrade">{{ standard_total_credit }}</span>
+                    </div>
+                    <div>
+                        <div class="gbox total_gbox">
+                            <span class="grade Grade">총 이수 학점
+                            </span>
+                            <span class="t" id="mytotalgrade">{{ total_credit }}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="gbox Gbox total_gbox">
+                            <span class="cap"><i class="fas fa-graduation-cap"></i></span>
+                            <div class="T" id="cangraduate"></div>
+                            <!-- <div class="T">졸업까지 {{ remaining_credits }}학점이 필요합니다!</div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rcontainer">
+        <!-- 전공 -->
+        <div class="resultbox">
+            <div class="name">전공</div>
+            <div class="box">
+                <!-- 원 그래프 -->
+                <div id="chart1">
+                    <strong></strong>
+                    <!-- 원 그래프 -->
+                    <script>
+                        //퍼센트화 함수
+                        function to_percent(my, standard) {
+                            a = (my / standard) * 100
+                            if (a > 100) {
+                                a = 100
+                            }
+                            return a;
+                        }
+                        
+                        $(document).ready(function () {
+                            // 학점 데이터 가져오기
+                            const standard = parseInt($('#standard_major_total_credit').text(), 10);
+                            const user = parseInt($('#major_total_credit').text(), 10);
+                    
+                            // 비율 계산
+                            const percentage = to_percent(user, standard);
+                    
+                            // 원형 그래프 생성
+                            $('#chart1').circleProgress({
+                                value: percentage / 100,  // 0~1 범위로 비율 계산
+                                size: 170,               // 원 크기
+                                thickness: 15,           // 원 두께
+                                startAngle: -Math.PI / 2, // 시작 각도 (위쪽부터 시작)
+                                fill: {
+                                    gradient: ["#f5aeb0", "#b06163"] // 색상 그라데이션
+                                }
+                            }).on('circle-animation-progress', function (event, progress) {
+                                $(this).find('strong').html(Math.round(percentage) + '<i>%</i>'); // 퍼센트 텍스트
+                            });
+                        });
+                    </script>
+                </div>
+                <!-- 텍스트 영역 -->
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade">기준 학점</span>
+                        <span class="r" id="standard_major_total_credit">{{ standard_major_total_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade">이수 학점</span>
+                        <span class="r" id="major_total_credit">{{ major_total_credit }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- 전공 필수 -->
+        <div class="resultbox">
+            <div class="name">전공 필수</div>
+            <div class="box">
+                <div id="chart2">
+                    <strong></strong>
+                    <!-- 원 그래프 -->
+                    <script>
+                        //퍼센트화 함수
+                        function to_percent(my, standard) {
+                            a = (my / standard) * 100
+                            if (a > 100) {
+                                a = 100
+                            }
+                            return a;
+                        }
+                        
+                        $(document).ready(function () {
+                            // 학점 데이터 가져오기
+                            const standard = parseInt($('#standard_major_ess_credit').text(), 10);
+                            const user = parseInt($('#major_ess_credit').text(), 10);
+                    
+                            // 비율 계산
+                            const percentage = to_percent(user, standard);
+                    
+                            // 원형 그래프 생성
+                            $('#chart2').circleProgress({
+                                value: percentage / 100,  // 0~1 범위로 비율 계산
+                                size: 170,               // 원 크기
+                                thickness: 15,           // 원 두께
+                                startAngle: -Math.PI / 2, // 시작 각도 (위쪽부터 시작)
+                                fill: {
+                                    gradient: ["#f5aeb0", "#b06163"] // 색상 그라데이션
+                                }
+                            }).on('circle-animation-progress', function (event, progress) {
+                                $(this).find('strong').html(Math.round(percentage) + '<i>%</i>'); // 퍼센트 텍스트
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade">기준 학점</span>
+                        <span class="r" id="standard_major_ess_credit">{{ standard_major_ess_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade" >이수 학점</span>
+                        <span class="r" id="major_ess_credit">{{ major_ess_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade">필수 과목</span>
+                        <span class="tooltip">
+                            <span class='tip_div'>Tip</span>
+                        </span>
+                        <span class="r" id="cs_p"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- 공통 교양 -->
+        <div class="resultbox">
+            <div class="name">공통 교양</div>
+            <div class="box">
+                <div id="chart3">
+                    <strong></strong>
+                    <!-- 원 그래프 -->
+                    <script>
+                        //퍼센트화 함수
+                        function to_percent(my, standard) {
+                            a = (my / standard) * 100
+                            if (a > 100) {
+                                a = 100
+                            }
+                            return a;
+                        }
+                        
+                        $(document).ready(function () {
+                            // 학점 데이터 가져오기
+                            const standard = parseInt($('#standard_general_ess_credit').text(), 10);
+                            const user = parseInt($('#general_ess_credit').text(), 10);
+                    
+                            // 비율 계산
+                            const percentage = to_percent(user, standard);
+                    
+                            // 원형 그래프 생성
+                            $('#chart3').circleProgress({
+                                value: percentage / 100,  // 0~1 범위로 비율 계산
+                                size: 170,               // 원 크기
+                                thickness: 15,           // 원 두께
+                                startAngle: -Math.PI / 2, // 시작 각도 (위쪽부터 시작)
+                                fill: {
+                                    gradient: ["#f5aeb0", "#b06163"] // 색상 그라데이션
+                                }
+                            }).on('circle-animation-progress', function (event, progress) {
+                                $(this).find('strong').html(Math.round(percentage) + '<i>%</i>'); // 퍼센트 텍스트
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade">기준 학점</span>
+                        <span class="r" id="standard_general_ess_credit">{{ standard_general_ess_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade">이수 학점</span>
+                        <span class="r" id="general_ess_credit">{{ general_ess_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade">필수 과목</span>
+                        <span class="r" id="cs_p"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- BSM 전체 -->
+        <div class="resultbox">
+            <div class="name">BSM 전체</div>
+            <div class="box">
+                <div id="chart5">
+                    <strong></strong>
+                    <!-- 원 그래프 -->
+                    <script>
+                        //퍼센트화 함수
+                        function to_percent(my, standard) {
+                            a = (my / standard) * 100
+                            if (a > 100) {
+                                a = 100
+                            }
+                            return a;
+                        }
+                        
+                        $(document).ready(function () {
+                            // 학점 데이터 가져오기
+                            const standard = parseInt($('#standard_bsm_total_credit').text(), 10);
+                            const user = parseInt($('#bsm_total_credit').text(), 10);
+                    
+                            // 비율 계산
+                            const percentage = to_percent(user, standard);
+                    
+                            // 원형 그래프 생성
+                            $('#chart5').circleProgress({
+                                value: percentage / 100,  // 0~1 범위로 비율 계산
+                                size: 170,               // 원 크기
+                                thickness: 15,           // 원 두께
+                                startAngle: -Math.PI / 2, // 시작 각도 (위쪽부터 시작)
+                                fill: {
+                                    gradient: ["#f5aeb0", "#b06163"] // 색상 그라데이션
+                                }
+                            }).on('circle-animation-progress', function (event, progress) {
+                                $(this).find('strong').html(Math.round(percentage) + '<i>%</i>'); // 퍼센트 텍스트
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade">기준 학점</span>
+                        <span class="r" id="standard_bsm_total_credit">{{ standard_bsm_total_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade" >이수 학점</span>
+                        <span class="r" id="bsm_total_credit">{{ bsm_total_credit }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BSM 필수 -->
+        <div class="resultbox">
+            <div class="name">BSM 필수</div>
+            <div class="box">
+                <div id="chart6">
+                    <strong></strong>
+                    <!-- 원 그래프 -->
+                    <script>
+                        //퍼센트화 함수
+                        function to_percent(my, standard) {
+                            a = (my / standard) * 100
+                            if (a > 100) {
+                                a = 100
+                            }
+                            return a;
+                        }
+                        
+                        $(document).ready(function () {
+                            // 학점 데이터 가져오기
+                            const standard = parseInt($('#standard_bsm_ess_credit').text(), 10);
+                            const user = parseInt($('#bsm_ess_credit').text(), 10);
+                    
+                            // 비율 계산
+                            const percentage = to_percent(user, standard);
+                    
+                            // 원형 그래프 생성
+                            $('#chart6').circleProgress({
+                                value: percentage / 100,  // 0~1 범위로 비율 계산
+                                size: 170,               // 원 크기
+                                thickness: 15,           // 원 두께
+                                startAngle: -Math.PI / 2, // 시작 각도 (위쪽부터 시작)
+                                fill: {
+                                    gradient: ["#f5aeb0", "#b06163"] // 색상 그라데이션
+                                }
+                            }).on('circle-animation-progress', function (event, progress) {
+                                $(this).find('strong').html(Math.round(percentage) + '<i>%</i>'); // 퍼센트 텍스트
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade">기준 학점</span>
+                        <span class="r" id="standard_bsm_ess_credit">{{ standard_bsm_ess_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade" >이수 학점</span>
+                        <span class="r" id="bsm_ess_credit">{{ bsm_ess_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade">필수 과목</span>
+                        <span class="r" id="cs_p"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 영어 강의 -->
+        <div class="resultbox">
+            <div class="name">영어 강의</div>
+            <div class="box">
+                <div id="chart7">
+                    <strong></strong>
+                    <!-- 원 그래프 -->
+                    <script>
+                        //퍼센트화 함수
+                        function to_percent(my, standard) {
+                            a = (my / standard) * 100
+                            if (a > 100) {
+                                a = 100
+                            }
+                            return a;
+                        }
+                        
+                        $(document).ready(function () {
+                            // 학점 데이터 가져오기
+                            const standard = parseInt($('#standard_eng_total_credit').text(), 10);
+                            const user = parseInt($('#eng_total_credit').text(), 10);
+                    
+                            // 비율 계산
+                            const percentage = to_percent(user, standard);
+                    
+                            // 원형 그래프 생성
+                            $('#chart7').circleProgress({
+                                value: percentage / 100,  // 0~1 범위로 비율 계산
+                                size: 170,               // 원 크기
+                                thickness: 15,           // 원 두께
+                                startAngle: -Math.PI / 2, // 시작 각도 (위쪽부터 시작)
+                                fill: {
+                                    gradient: ["#f5aeb0", "#b06163"] // 색상 그라데이션
+                                }
+                            }).on('circle-animation-progress', function (event, progress) {
+                                $(this).find('strong').html(Math.round(percentage) + '<i>%</i>'); // 퍼센트 텍스트
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade">기준 학점</span>
+                        <span class="r" id="standard_eng_total_credit">{{ bsm_ess_credit }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade" >이수 학점</span>
+                        <span class="r" id="eng_total_credit">{{ eng_total_credit }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 평점 평균 -->
+        <div class="resultbox">
+            <div class="name">평점 평균</div>
+            <div class="box">
+                <div id="chart8">
+                    <strong></strong>
+                    
+                </div>
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade">기준 평점 평균</span>
+                        <span class="r" id="standard_GPA">{{ standard_GPA }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade" >학생 평점 평균</span>
+                        <span class="r" id = "GPA">{{ GPA }}</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade">졸업 요건</span>
+                        <span class="r">
+                            {% if GPA >= standard_GPA %}
+                                충족
+                            {% else %}
+                                미충족
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 외국어 시험 -->
+        <div class="resultbox">
+            <div class="name name8">외국어 시험</div>
+            <div class="box">
+                <div id="chart9">
+                    <strong></strong>
+                </div>
+                <div class="sbox">
+                    <div class="gbox">
+                        <span class="grade" style="font-weight: bold;">TOEIC</span>
+                    </div>
+                    <div class="gbox">
+                        <span class="r" id="score-ratio">{{ toeic_score }}/{{ standard_toeic }} </span>
+                    </div>
+                    <div class="gbox">
+                        <span class="grade">졸업 요건</span>
+                        <span class="r">
+                            {% if toeic_score >= standard_toeic %}
+                                충족
+                            {% else %}
+                                미충족
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

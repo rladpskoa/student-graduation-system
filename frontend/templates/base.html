@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}졸업 요건 사이트{% endblock %}</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/circle-progress.min.js') }}"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- 콘텐츠 블록 -->
+    <main>
+        {% block content %}
+        <!-- 개별 페이지 콘텐츠가 여기에 삽입됩니다 -->
+        {% endblock %}
+    </main>
+    
+    <!--footer-->
+    <footer class="footer">
+        <ul class="footer_list">
+            <li>
+                - Information -
+            </li>
+            <li>
+                2024-2 데이터베이스설계 기말 프로젝트
+            </li>
+            <li>
+                2021110439 김예나, 2022111700 김은서
+            </li>
+        </ul>
+    
+    </footer>
+
+</body>
+</html>

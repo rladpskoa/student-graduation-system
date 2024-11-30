@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}졸업 사정 시스템{% endblock %}
+
+{% block content %}
+<div class="bg_wrapper">
+    <!-- 메인 배경 -->
+    <header class="main_bg">
+        <div class="logo">
+            <img src="/static/img/logo.png" alt="졸업 모자">
+        </div>
+        <div class="bg_text_btn">
+            <div class="bg_small_text">
+                Graduation Requirements Website
+            </div>
+            <div class="bg_big_text">
+                졸업 요건
+            </div>
+            <!-- 버튼 -->
+            <div class="bg_btn">
+                <button class="bg_btn_style" onclick="location.href='/search/'">검사하기</button>
+            </div>
+        </div>
+    </header>
+</div>
+{% endblock %}

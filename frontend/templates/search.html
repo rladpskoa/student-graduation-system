@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}학생 조회{% endblock %}
+
+{% block content %}
+<!-- 위에 모자 -->
+<div class="white_sec">
+    <div class="container">
+        <div style="font-size:4rem;">
+            <img src="/static/img/logo.png" alt="졸업 모자" class="graduation-cap">
+        </div>
+        <div class="big_title">학생 조회</div>
+    </div>
+</div>
+
+<!-- 입력란 -->
+<div class="form-wrapper">
+    <div class="container">
+        <form action="/result/" method="post" name='search_form' onsubmit="return check_up()">
+            <div style="font-size:1rem; color:rgb(199, 199, 199)"> 이름, 전공, 학번, 영어인증을 입력해주세요. </div>
+            <div class="search_box" style="width:400px">
+            
+                <label>이름</label>
+                <input type="text" id="name" name="name" placeholder="홍길동" style="background-color:rgb(248,249,250)" value="김은서">
+                
+                <label>전공</label>
+                <input type="text" id="major" name="major" placeholder="컴퓨터공학과" style="background-color:rgb(248,249,250);" value="컴퓨터공학전공">
+        
+                <label for="student_id">학번</label>
+                <input type="text" id="student_id" name="student_id" placeholder="2022111222" style="background-color:rgb(248,249,250);" value="2022111700">
+        
+                <!-- 영어 인증 -->
+                <label for="eng">영어인증</label>
+                <select onclick="pop_score()" id="eng" name="eng">
+                    <option value="해당없음" selected>해당없음</option>
+                    <option value="TOEIC">TOEIC</option>
+                    <option value="TOEFL">TOEFL</option>
+                    <option value="TEPS">TEPS</option>
+                    <option value="New_TEPS">New TEPS</option>
+                    <option value="OPIc">OPIc</option>
+                    <option value="TOEIC_Speaking">TOEIC Speaking</option>
+                </select>
+            </div>
+            <button class="search_btn" onclick="location.href='/result/'">조회하기</button>
+        </form>
+    </div>
+</div> 
+
+<script>
+    // "가입하기" 버튼 클릭 시 경고창 표시 (테스트 용도)
+    function showAlert() {
+        alert("Mock 데이터를 입력한 상태로 테스트 중입니다!");
+    }
+
+    // 영어 인증 변경 시 동작 테스트 (UI 이벤트용)
+    function pop_score() {
+        const engSelect = document.getElementById('eng');
+        console.log(`Selected English Certification: ${engSelect.value}`);
+    }
+</script>
+{% endblock %}
