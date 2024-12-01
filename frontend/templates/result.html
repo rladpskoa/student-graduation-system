@@ -34,8 +34,8 @@
                         
                         $(document).ready(function () {
                             // 학점 데이터 가져오기
-                            const totalGrade = parseInt($('#totalgrade').text(), 10);
-                            const myTotalGrade = parseInt($('#mytotalgrade').text(), 10);
+                            const totalGrade = parseInt($('#standard_total_credit').text(), 10);
+                            const myTotalGrade = parseInt($('#total_credit').text(), 10);
                     
                             // 비율 계산
                             const percentage = (myTotalGrade / totalGrade) * 100;
@@ -62,22 +62,22 @@
                 <div class="Sbox">
                     <div class="gbox total_gbox">
                         <span class="grade Grade">학번</span>
-                        <span class="t" id="studentnumber">{{ student_id }}</span>
+                        <span class="t" id="student_id">{{ status_data['student_id'] }}</span>
                     </div>
                     <div class="gbox total_gbox">
                         <span class="grade Grade">이름</span>
-                        <span class="t" id="name">{{ name }}</span>
+                        <span class="t" id="name">{{ performance_data['name'] }}</span>
                     </div>
                     <div class="gbox total_gbox">
                         <span class="grade Grade">총 기준 학점
                         </span>
-                        <span class="t" id="totalgrade">{{ standard_total_credit }}</span>
+                        <span class="t" id="standard_total_credit">{{ graduation_data['standard_total_credit'] }}</span>
                     </div>
                     <div>
                         <div class="gbox total_gbox">
                             <span class="grade Grade">총 이수 학점
                             </span>
-                            <span class="t" id="mytotalgrade">{{ total_credit }}</span>
+                            <span class="t" id="total_credit">{{ status_data['total_credit'] }}</span>
                         </div>
                     </div>
                     <div>
@@ -138,11 +138,11 @@
                 <div class="sbox">
                     <div class="gbox">
                         <span class="grade">기준 학점</span>
-                        <span class="r" id="standard_major_total_credit">{{ standard_major_total_credit }}</span>
+                        <span class="r" id="standard_major_total_credit">{{ graduation_data['standard_major_total_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade">이수 학점</span>
-                        <span class="r" id="major_total_credit">{{ major_total_credit }}</span>
+                        <span class="r" id="major_total_credit">{{ status_data['major_total_credit'] }}</span>
                     </div>
                 </div>
             </div>
@@ -191,11 +191,11 @@
                 <div class="sbox">
                     <div class="gbox">
                         <span class="grade">기준 학점</span>
-                        <span class="r" id="standard_major_ess_credit">{{ standard_major_ess_credit }}</span>
+                        <span class="r" id="standard_major_ess_credit">{{ graduation_data['standard_major_ess_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade" >이수 학점</span>
-                        <span class="r" id="major_ess_credit">{{ major_ess_credit }}</span>
+                        <span class="r" id="major_ess_credit">{{ status_data['major_ess_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade">필수 과목</span>
@@ -251,11 +251,11 @@
                 <div class="sbox">
                     <div class="gbox">
                         <span class="grade">기준 학점</span>
-                        <span class="r" id="standard_general_ess_credit">{{ standard_general_ess_credit }}</span>
+                        <span class="r" id="standard_general_ess_credit">{{ graduation_data['standard_general_ess_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade">이수 학점</span>
-                        <span class="r" id="general_ess_credit">{{ general_ess_credit }}</span>
+                        <span class="r" id="general_ess_credit">{{ status_data['general_ess_credit']}}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade">필수 과목</span>
@@ -309,11 +309,11 @@
                 <div class="sbox">
                     <div class="gbox">
                         <span class="grade">기준 학점</span>
-                        <span class="r" id="standard_bsm_total_credit">{{ standard_bsm_total_credit }}</span>
+                        <span class="r" id="standard_bsm_total_credit">{{ graduation_data['standard_bsm_total_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade" >이수 학점</span>
-                        <span class="r" id="bsm_total_credit">{{ bsm_total_credit }}</span>
+                        <span class="r" id="bsm_total_credit">{{ status_data['bsm_total_credit'] }}</span>
                     </div>
                 </div>
             </div>
@@ -362,11 +362,11 @@
                 <div class="sbox">
                     <div class="gbox">
                         <span class="grade">기준 학점</span>
-                        <span class="r" id="standard_bsm_ess_credit">{{ standard_bsm_ess_credit }}</span>
+                        <span class="r" id="standard_bsm_ess_credit">{{ graduation_data['standard_bsm_ess_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade" >이수 학점</span>
-                        <span class="r" id="bsm_ess_credit">{{ bsm_ess_credit }}</span>
+                        <span class="r" id="bsm_ess_credit">{{ status_data['bsm_ess_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade">필수 과목</span>
@@ -419,11 +419,11 @@
                 <div class="sbox">
                     <div class="gbox">
                         <span class="grade">기준 학점</span>
-                        <span class="r" id="standard_eng_total_credit">{{ bsm_ess_credit }}</span>
+                        <span class="r" id="standard_eng_total_credit">{{ graduation_data['standard_eng_total_credit'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade" >이수 학점</span>
-                        <span class="r" id="eng_total_credit">{{ eng_total_credit }}</span>
+                        <span class="r" id="eng_total_credit">{{ status_data['eng_total_credit'] }}</span>
                     </div>
                 </div>
             </div>
@@ -440,16 +440,16 @@
                 <div class="sbox">
                     <div class="gbox">
                         <span class="grade">기준 평점 평균</span>
-                        <span class="r" id="standard_GPA">{{ standard_GPA }}</span>
+                        <span class="r" id="standard_GPA">{{ graduation_data['standard_GPA'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade" >학생 평점 평균</span>
-                        <span class="r" id = "GPA">{{ GPA }}</span>
+                        <span class="r" id = "GPA">{{ performance_data['GPA'] }}</span>
                     </div>
                     <div class="gbox">
                         <span class="grade">졸업 요건</span>
                         <span class="r">
-                            {% if GPA >= standard_GPA %}
+                            {% if performance_data['GPA'] >= graduation_data['standard_GPA'] %}
                                 충족
                             {% else %}
                                 미충족
@@ -472,12 +472,12 @@
                         <span class="grade" style="font-weight: bold;">TOEIC</span>
                     </div>
                     <div class="gbox">
-                        <span class="r" id="score-ratio">{{ toeic_score }}/{{ standard_toeic }} </span>
+                        <span class="r" id="score-ratio">{{ performance_data['toeic_score'] }}/{{ graduation_data['standard_toeic'] }} </span>
                     </div>
                     <div class="gbox">
                         <span class="grade">졸업 요건</span>
                         <span class="r">
-                            {% if toeic_score >= standard_toeic %}
+                            {% if performance_data['toeic_score'] >= graduation_data['standard_toeic'] %}
                                 충족
                             {% else %}
                                 미충족
@@ -490,3 +490,11 @@
     </div>
 </div>
 {% endblock %}
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const student_id = urlParams.get('student_id');
+    
+    console.log(`Student ID: ${student_id}`);
+
+  </script>
