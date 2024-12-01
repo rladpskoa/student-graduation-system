@@ -74,15 +74,15 @@ def get_student_status(student_id):
         logging.error(f"Error fetching student status: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
 
-@app.route('/student-info/<student_id>/performance', methods=['GET'])
+@app.route('/student-info/<student_id>', methods=['GET'])
 def get_student_performance(student_id):
     try:
         cursor = mysql.connection.cursor()
-        query = "SELECT toeic_score, GPA FROM student_info WHERE student_id = %s"
+        query = "SELECT name, toeic_score, GPA FROM student_info WHERE student_id = %s"
         cursor.execute(query, (student_id,))
         result = cursor.fetchone()
         if result:
-            response = {"toeic_score": result[0], "GPA": result[1]}
+            response = {"name": result[0], "toeic_score": result[1], "GPA": result[2]}
             return jsonify(response), 200
         else:
             return jsonify({"error": "No student performance data found"}), 404
@@ -92,7 +92,7 @@ def get_student_performance(student_id):
     
 if __name__ == "__main__":
     #app.run(host="10.74.27.188", port=5000)
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0', port='5555')
 
 # # 전체 학생 상태 업데이트
 # @app.route('/update_student_status', methods=['POST'])

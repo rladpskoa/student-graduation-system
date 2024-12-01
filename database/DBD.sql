@@ -362,19 +362,7 @@ standard_basic_total_credit, standard_bsm_total_credit, standard_bsm_ess__credit
     '지혜와자비 명작세미나, 존재와역사 명작세미나, 경제와사회 명작세미나, 자연과기술 명작세미나, 문화와예술 명작세미나',
     9, 21, 16, '미적분학및연습1, 확률및통계학, 공학선형대수학, 이산수학', '일반화학및실험1, 일반생물학및실험1, 일반물리학및실험1', 10, 700, 2.0);
 
-CREATE VIEW student_enrollment_summary AS
-SELECT 
-    student_id,
-    SUM(credit) AS total_credit,
-    SUM(CASE WHEN category = '전공' THEN credit ELSE 0 END) AS major_total_credit,
-    SUM(CASE WHEN category = '학문기초' THEN credit ELSE 0 END) AS bsm_total_credit,
-    SUM(CASE WHEN is_english = TRUE THEN credit ELSE 0 END) AS eng_total_credit
-FROM student_enrollment
-GROUP BY student_id;
-
 DROP PROCEDURE IF EXISTS update_student_status;
-DELIMITER $$
-
 CREATE PROCEDURE update_student_status(IN student_id_i VARCHAR(10))
 BEGIN
     DECLARE total_credit INT DEFAULT 0;
@@ -387,31 +375,40 @@ BEGIN
     DECLARE major_ess_list_c TEXT;
     DECLARE general_ess_list_c TEXT;
     DECLARE bsm_ess_list_c TEXT;
-    DECLARE v_error_message VARCHAR(255);
-    
-    -- Exception Handling
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-    SET v_error_message = 'Error occurred during procedure execution';
 
-    -- Retrieve total credits from the view
-    SELECT total_credit, major_total_credit, bsm_total_credit, eng_total_credit
-    INTO total_credit, major_total_credit, bsm_total_credit, eng_total_credit
-    FROM student_enrollment_summary
+    -- 영어 강의 학점 합산
+    SELECT IFNULL(SUM(credit), 0) 
+    INTO eng_total_credit
+    FROM student_enrollment 
+    WHERE student_id = student_id_i AND is_english = TRUE;
+    SELECT eng_total_credit;
+
+    -- 총 학점, 전공 학점, 학문기초 학점 계산
+    SELECT IFNULL(SUM(credit), 0), 
+           IFNULL(SUM(CASE WHEN category = '전공' THEN credit ELSE 0 END), 0),
+           IFNULL(SUM(CASE WHEN category = '학문기초' THEN credit ELSE 0 END), 0)
+    INTO total_credit, major_total_credit, bsm_total_credit
+    FROM student_enrollment 
     WHERE student_id = student_id_i;
+    SELECT total_credit, major_total_credit, bsm_total_credit;
 
-    -- Retrieve required course lists
-    SELECT major_ess_list, g_ess_list, bsm_ess_list
+    -- graduation_requirement에서 major_ess_list, g_ess_list, bsm_ess_list 가져오기
+    SELECT standard_major_ess_list, standard_g_ess_list, standard_bsm_ess_list
     INTO major_ess_list_c, general_ess_list_c, bsm_ess_list_c
     FROM graduation_requirement
     JOIN student_info ON graduation_requirement.standard_year = student_info.enter_year
     WHERE student_info.student_id = student_id_i;
+    SELECT major_ess_list_c, general_ess_list_c, bsm_ess_list_c;
 
-    -- Calculate required credits
+    -- 각 필수 과목 학점 계산
     CALL calculate_credits(student_id_i, major_ess_list_c, major_ess_credit);
+    SELECT major_ess_credit;
     CALL calculate_credits(student_id_i, general_ess_list_c, general_ess_credit);
+    SELECT general_ess_credit;
     CALL calculate_credits(student_id_i, bsm_ess_list_c, bsm_ess_credit);
+    SELECT bsm_ess_credit;
 
-    -- Update or Insert student status
+    -- student_status 업데이트 또는 삽입
     IF EXISTS (SELECT 1 FROM student_status WHERE student_id = student_id_i) THEN
         UPDATE student_status
         SET total_credit = total_credit,
@@ -428,14 +425,7 @@ BEGIN
         VALUES (student_id_i, total_credit, major_total_credit, bsm_total_credit, major_ess_credit, 
                 general_ess_credit, bsm_ess_credit, eng_total_credit);
     END IF;
-    
-    -- Error handling
-    IF v_error_message IS NOT NULL THEN
-        SELECT v_error_message AS error_message;
-    END IF;
-END $$
-
-DELIMITER ;
+END ;
 
 DROP PROCEDURE IF EXISTS calculate_credits;
 CREATE PROCEDURE calculate_credits(
@@ -523,10 +513,12 @@ BEGIN
     CALL update_student_status(NEW.student_id);
 END;
 
-
 SET @REGC = 0;
 CALL calculate_credits('2021110439', '미적분학및연습1, 확률및통계학, 공학선형대수학', @REGC);
 -- 결과 확인
 SELECT @REGC AS total_credits;
-CALL update_student_status('2021110439');
+
+CALL update_student_status('2024000000');
 SELECT * FROM student_status;
+
+SELECT * FROM student_info;
